@@ -314,3 +314,17 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
 /* 觸發鈕本來是 <a>，改成 <button> 後要清掉瀏覽器預設樣式 */
 button.pill-cta,button.act,button.dock{font-family:var(--zh); border:0; text-align:left; cursor:pointer}
 button.act{width:100%}
+
+.notice{
+  background:var(--paper); border-radius:var(--r-sm); padding:0 14px;
+  font-size:13px; line-height:1.7; color:var(--ink-soft);
+}
+.notice summary{
+  cursor:pointer; padding:12px 0; font-weight:700; color:var(--ink);
+  font-size:13.5px; list-style:none;
+}
+.notice summary::-webkit-details-marker{display:none}
+.notice summary::before{content:"▸ "; color:var(--sky)}
+.notice[open] summary::before{content:"▾ "}
+.notice ul{margin:0 0 14px; padding-left:1.1em; display:flex; flex-direction:column; gap:6px}
+.notice b{color:var(--ink)}

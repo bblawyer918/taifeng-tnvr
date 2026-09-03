@@ -325,6 +325,20 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
 /* 觸發鈕本來是 <a>，改成 <button> 後要清掉瀏覽器預設樣式 */
 button.pill-cta,button.act,button.dock{font-family:var(--zh); border:0; text-align:left; cursor:pointer}
 button.act{width:100%}
+
+.notice{
+  background:var(--paper); border-radius:var(--r-sm); padding:0 14px;
+  font-size:13px; line-height:1.7; color:var(--ink-soft);
+}
+.notice summary{
+  cursor:pointer; padding:12px 0; font-weight:700; color:var(--ink);
+  font-size:13.5px; list-style:none;
+}
+.notice summary::-webkit-details-marker{display:none}
+.notice summary::before{content:"▸ "; color:var(--sky)}
+.notice[open] summary::before{content:"▾ "}
+.notice ul{margin:0 0 14px; padding-left:1.1em; display:flex; flex-direction:column; gap:6px}
+.notice b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -978,7 +992,7 @@ button.act{width:100%}
         </div>
         <button type="button" class="form-x" data-close aria-label="關閉">✕</button>
       </div>
-      <p class="privacy">🔒 這張表單不會問你的名字、電話或 email。</p>
+      <p class="privacy">🔒 聯絡方式可以不填。填了只會用來跟你確認這一筆，不會用在別的地方。</p>
       <form class="form-body" data-kind="report" novalidate>
         
       <div class="fld">
@@ -999,12 +1013,33 @@ button.act{width:100%}
         <input class="txt" id="report-looks" name="looks"
                placeholder="例：橘白色，大概兩隻" autocomplete="off">
       </div>
+        
+      <div class="fld">
+        <span class="lbl">方便的話留個聯絡方式<i>可跳過</i></span>
+        <div class="opts"><label class="opt"><input type="radio" name="contact_type" value="LINE" checked data-ph="你的 LINE ID"><span>LINE</span></label><label class="opt"><input type="radio" name="contact_type" value="電話" data-ph="09xx-xxx-xxx"><span>電話</span></label><label class="opt"><input type="radio" name="contact_type" value="Email" data-ph="you@example.com"><span>Email</span></label></div>
+        <input class="txt" id="report-contact" name="contact"
+               placeholder="你的 LINE ID" autocomplete="off">
+        <p class="hint">只有在需要跟你確認地點、或想告訴你處理結果時才會聯絡。不留也可以送出，通報一樣會收到。</p>
+      </div>
         <div class="fld">
           <label class="lbl" for="report-photo">照片<i>可跳過</i></label>
           <input class="file" id="report-photo" name="photo" type="file"
                  accept="image/*" capture="environment">
           <p class="hint">會自動縮小再上傳，不會佔你的流量。</p>
         </div>
+        
+      <details class="notice">
+        <summary>留了聯絡方式，我們會怎麼處理？</summary>
+        <ul>
+          <li><b>誰在蒐集</b>：台鳳探險隊（台鳳里浪貓通報站）</li>
+          <li><b>做什麼用</b>：處理這筆浪貓通報或環境檢舉，必要時跟你確認細節、回報結果</li>
+          <li><b>存哪裡</b>：本計畫的 Google 試算表，只有工作人員看得到</li>
+          <li><b>會給誰</b>：本計畫工作人員，以及為了執行 TNVR 而配合的獸醫院</li>
+          <li><b>存多久</b>：到這個計畫結束，或你要求刪除為止</li>
+          <li><b>你的權利</b>：可以隨時要求查詢、更正或刪除你留下的聯絡方式</li>
+          <li><b>不留會怎樣</b>：不影響通報，我們只是沒辦法回覆你</li>
+        </ul>
+      </details>
         <button class="submit" type="submit">送出通報</button>
         <p class="form-msg" data-msg role="status"></p>
       </form>
@@ -1026,7 +1061,7 @@ button.act{width:100%}
         </div>
         <button type="button" class="form-x" data-close aria-label="關閉">✕</button>
       </div>
-      <p class="privacy">🔒 這張表單不會問你的名字、電話或 email。</p>
+      <p class="privacy">🔒 聯絡方式可以不填。填了只會用來跟你確認這一筆，不會用在別的地方。</p>
       <form class="form-body" data-kind="complain" novalidate>
         
       <div class="fld">
@@ -1046,12 +1081,33 @@ button.act{width:100%}
         <textarea class="txt" id="complain-note" name="note" rows="3"
                   placeholder="例：每天早上都有，位置固定"></textarea>
       </div>
+        
+      <div class="fld">
+        <span class="lbl">方便的話留個聯絡方式<i>可跳過</i></span>
+        <div class="opts"><label class="opt"><input type="radio" name="contact_type" value="LINE" checked data-ph="你的 LINE ID"><span>LINE</span></label><label class="opt"><input type="radio" name="contact_type" value="電話" data-ph="09xx-xxx-xxx"><span>電話</span></label><label class="opt"><input type="radio" name="contact_type" value="Email" data-ph="you@example.com"><span>Email</span></label></div>
+        <input class="txt" id="complain-contact" name="contact"
+               placeholder="你的 LINE ID" autocomplete="off">
+        <p class="hint">只有在需要跟你確認地點、或想告訴你處理結果時才會聯絡。不留也可以送出，通報一樣會收到。</p>
+      </div>
         <div class="fld">
           <label class="lbl" for="complain-photo">照片<i>可跳過</i></label>
           <input class="file" id="complain-photo" name="photo" type="file"
                  accept="image/*" capture="environment">
           <p class="hint">會自動縮小再上傳，不會佔你的流量。</p>
         </div>
+        
+      <details class="notice">
+        <summary>留了聯絡方式，我們會怎麼處理？</summary>
+        <ul>
+          <li><b>誰在蒐集</b>：台鳳探險隊（台鳳里浪貓通報站）</li>
+          <li><b>做什麼用</b>：處理這筆浪貓通報或環境檢舉，必要時跟你確認細節、回報結果</li>
+          <li><b>存哪裡</b>：本計畫的 Google 試算表，只有工作人員看得到</li>
+          <li><b>會給誰</b>：本計畫工作人員，以及為了執行 TNVR 而配合的獸醫院</li>
+          <li><b>存多久</b>：到這個計畫結束，或你要求刪除為止</li>
+          <li><b>你的權利</b>：可以隨時要求查詢、更正或刪除你留下的聯絡方式</li>
+          <li><b>不留會怎樣</b>：不影響通報，我們只是沒辦法回覆你</li>
+        </ul>
+      </details>
         <button class="submit" type="submit">送出檢舉</button>
         <p class="form-msg" data-msg role="status"></p>
       </form>
@@ -1284,6 +1340,15 @@ var ENDPOINT = "https://REPLACE-ME.example/exec";
     });
   });
 
+  // 聯絡方式：換管道時同步換提示文字
+  document.querySelectorAll('.form-body').forEach(function (form) {
+    var box = form.querySelector('[name=contact]');
+    if (!box) return;
+    form.querySelectorAll('[name=contact_type]').forEach(function (r) {
+      r.addEventListener('change', function () { box.placeholder = r.dataset.ph || ''; });
+    });
+  });
+
   // 上傳前先縮圖，避免佔使用者流量
   function shrink(file, cb) {
     if (!file) return cb('');
@@ -1326,6 +1391,9 @@ var ENDPOINT = "https://REPLACE-ME.example/exec";
       var data = { kind: form.getAttribute('data-kind') };
       new FormData(form).forEach(function (v, k) { if (k !== 'photo') data[k] = v; });
       if (geo && geo.dataset.lat) data.coords = geo.dataset.lat + ',' + geo.dataset.lng;
+      data.contact = data.contact && data.contact.trim()
+        ? (data.contact_type || '') + '：' + data.contact.trim() : '';
+      delete data.contact_type;
 
       shrink(form.querySelector('[name=photo]').files[0], function (photo) {
         data.photo = photo;

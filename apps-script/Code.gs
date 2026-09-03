@@ -1,7 +1,7 @@
 /**
  * 台鳳里浪貓通報站 — 表單後端
  * 收到網站送來的通報／檢舉，寫進 Google 試算表。
- * 不收集姓名、電話、email。
+ * 聯絡方式為選填；未填仍可送出。
  */
 
 const SHEET_ID = '1BxmHORen_jPpaWMIsfKKdvv_ZXe0n33GZ3RklUMQToI';
@@ -10,13 +10,13 @@ const PHOTO_FOLDER = '台鳳里浪貓通報－照片';
 const SCHEMA = {
   report: {
     tab: '通報',
-    cols: ['送出時間', '地點', '座標', '有沒有剪耳', '貓的樣子', '照片'],
-    pick: d => [d.place || '', d.coords || '', d.eartip || '', d.looks || '']
+    cols: ['送出時間', '地點', '座標', '有沒有剪耳', '貓的樣子', '聯絡方式', '照片'],
+    pick: d => [d.place || '', d.coords || '', d.eartip || '', d.looks || '', d.contact || '']
   },
   complain: {
     tab: '檢舉',
-    cols: ['送出時間', '地點', '座標', '狀況', '補充說明', '照片'],
-    pick: d => [d.place || '', d.coords || '', d.issue || '', d.note || '']
+    cols: ['送出時間', '地點', '座標', '狀況', '補充說明', '聯絡方式', '照片'],
+    pick: d => [d.place || '', d.coords || '', d.issue || '', d.note || '', d.contact || '']
   }
 };
 

@@ -217,6 +217,15 @@ var ENDPOINT = "https://REPLACE-ME.example/exec";
     });
   });
 
+  // 聯絡方式：換管道時同步換提示文字
+  document.querySelectorAll('.form-body').forEach(function (form) {
+    var box = form.querySelector('[name=contact]');
+    if (!box) return;
+    form.querySelectorAll('[name=contact_type]').forEach(function (r) {
+      r.addEventListener('change', function () { box.placeholder = r.dataset.ph || ''; });
+    });
+  });
+
   // 上傳前先縮圖，避免佔使用者流量
   function shrink(file, cb) {
     if (!file) return cb('');
@@ -259,6 +268,9 @@ var ENDPOINT = "https://REPLACE-ME.example/exec";
       var data = { kind: form.getAttribute('data-kind') };
       new FormData(form).forEach(function (v, k) { if (k !== 'photo') data[k] = v; });
       if (geo && geo.dataset.lat) data.coords = geo.dataset.lat + ',' + geo.dataset.lng;
+      data.contact = data.contact && data.contact.trim()
+        ? (data.contact_type || '') + '：' + data.contact.trim() : '';
+      delete data.contact_type;
 
       shrink(form.querySelector('[name=photo]').files[0], function (photo) {
         data.photo = photo;

@@ -1,4 +1,10 @@
-# 表單後端部署步驟（約 5 分鐘，只要做一次）
+# 表單後端
+
+**已部署完成（2026-09-03）**，網址已寫進 `index.html`。以下步驟只有在要重建時才需要。
+
+---
+
+# 重建步驟（約 5 分鐘）
 
 網站上的通報／檢舉表單會把資料送到這支 Apps Script，由它寫進 Google 試算表。
 沒有第三方服務，資料只在你自己的 Google 帳號裡。
@@ -41,3 +47,7 @@ var ENDPOINT = "https://script.google.com/macros/s/你的網址/exec";
 
 「部署」→「管理部署作業」→ 鉛筆圖示 → 版本選「新版本」→ 部署。
 **網址不會變**，不用再改網站。
+
+## Apps Script 專案
+
+https://script.google.com/home/projects/11RNJBlGI84q8WkWetYScw7_NaDiJJ9h84QcJpD4_iZmWjwQJl-NR2HVp/edit

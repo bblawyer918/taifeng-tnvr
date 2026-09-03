@@ -3,15 +3,13 @@ import json, html, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
-import art
+import art, forms
 
 M = json.load(open(os.path.join(HERE, 'mapdata.json'), encoding='utf-8'))
 F = M['frame']
 
 LI      = "台鳳里"
 CITY    = "彰化市"
-FORM_REPORT = "https://REPLACE-ME.example/通報表單"   # ⚠️ 換成 Google 表單網址
-FORM_COMPLAIN = "https://REPLACE-ME.example/檢舉表單" # ⚠️ 換成 Google 表單網址
 
 # ⚠️ 示範資料 — 座標取自台鳳里實際街道，貓咪名稱與數量請換成里內實際紀錄
 CATS = [
@@ -146,7 +144,7 @@ BODY = f'''
       </div>
       {catcards}
     </div>
-    <a class="pill-cta" data-form="report" href="{FORM_REPORT}" target="_blank" rel="noopener">立即通報
+    <button class="pill-cta" type="button" data-open="report">立即通報
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h12M12 6l6 6-6 6" fill="none"
         stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </header>
@@ -184,17 +182,17 @@ BODY = f'''
     <section class="cta" id="report">
       <h2><span class="slash">＼</span>一起打造友善社區吧<span class="slash">／</span></h2>
 
-      <a class="act act-report" data-form="report" href="{FORM_REPORT}" target="_blank" rel="noopener">
+      <button class="act act-report" type="button" data-open="report">
         <span class="act-q">在{LI}遇到<b>沒有剪耳</b>的浪貓？</span>
         <span class="act-btn">立即通報</span>
         <span class="act-art">{art.CAT_SILHOUETTE}</span>
-      </a>
+      </button>
 
-      <a class="act act-report act-complain" data-form="complain" href="{FORM_COMPLAIN}" target="_blank" rel="noopener">
+      <button class="act act-report act-complain" type="button" data-open="complain">
         <span class="act-q">在{LI}餵完浪貓<b>沒有整理環境</b>？</span>
         <span class="act-btn">我要檢舉</span>
         <span class="act-art">{art.FISHBONE}</span>
-      </a>
+      </button>
     </section>
   </main>
 
@@ -203,9 +201,11 @@ BODY = f'''
     <p class="foot-note">地圖里界資料來源：OpenStreetMap 貢獻者</p>
   </footer>
 
-  <a class="dock" data-form="report" href="{FORM_REPORT}" target="_blank" rel="noopener">立即通報
+  <button class="dock" type="button" data-open="report">立即通報
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h12M12 6l6 6-6 6" fill="none"
-      stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+  {forms.ALL}
 </div>
 '''
 

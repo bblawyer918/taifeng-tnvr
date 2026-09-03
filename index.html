@@ -244,6 +244,87 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
 }
+
+/* ── 站內表單 ───────────────────────────────────── */
+.form-sheet{
+  position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; justify-content:center;
+  background:rgba(16,40,54,.5); backdrop-filter:blur(3px); padding:0;
+  animation:fade .2s ease-out;
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.form-card{
+  width:100%; max-width:430px; max-height:94dvh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  background:var(--card); border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+  animation:rise .28s cubic-bezier(.2,.9,.3,1);
+}
+.form-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.form-head h2{font-size:21px}
+.form-sub{font-size:13px; color:var(--ink-faint); margin-top:3px}
+.form-x{
+  flex:0 0 34px; width:34px; height:34px; border-radius:50%; border:0; cursor:pointer;
+  background:var(--paper); color:var(--ink-soft); font-size:15px; line-height:34px; padding:0;
+}
+.privacy{
+  margin-top:14px; background:var(--sky-wash); color:var(--sky-deep);
+  border-radius:var(--r-sm); padding:9px 13px; font-size:13px; font-weight:500; line-height:1.6;
+}
+.form-body{display:flex; flex-direction:column; gap:18px; margin-top:18px}
+.fld{display:flex; flex-direction:column; gap:8px}
+.lbl{font-size:15px; font-weight:700; display:flex; align-items:baseline; gap:7px}
+.lbl i{
+  font-style:normal; font-size:11px; font-weight:500; letter-spacing:.04em;
+  color:var(--ink-faint); background:var(--paper); padding:2px 7px; border-radius:99px;
+}
+.txt{
+  font-family:var(--zh); font-size:16px; color:var(--ink); line-height:1.6;
+  border:1.5px solid var(--line); border-radius:var(--r-sm); background:#FCFBF9;
+  padding:11px 13px; width:100%; resize:vertical;
+}
+.txt::placeholder{color:#B4BCC1}
+.txt:focus{border-color:var(--sky); background:#fff; outline:none}
+.geo{
+  align-self:flex-start; font-family:var(--zh); font-size:13.5px; font-weight:700;
+  color:var(--sky-deep); background:var(--sky-wash); border:0; border-radius:99px;
+  padding:8px 15px; cursor:pointer;
+}
+.geo[disabled]{opacity:.55; cursor:default}
+.geo-out{font-size:12.5px; color:var(--leaf); font-weight:500}
+.hint{font-size:12.5px; color:var(--ink-faint); line-height:1.6}
+.opts{display:flex; flex-wrap:wrap; gap:8px}
+.opt{position:relative; cursor:pointer}
+.opt input{position:absolute; opacity:0; width:0; height:0}
+.opt span{
+  display:block; font-size:14.5px; font-weight:500; padding:9px 16px; border-radius:99px;
+  border:1.5px solid var(--line); background:#FCFBF9; color:var(--ink-soft);
+}
+.opt input:checked+span{border-color:var(--sky); background:var(--sky-wash); color:var(--sky-deep); font-weight:700}
+.opt input:focus-visible+span{outline:3px solid var(--sky-deep); outline-offset:2px}
+.file{
+  font-family:var(--zh); font-size:14px; color:var(--ink-soft);
+  border:1.5px dashed var(--line); border-radius:var(--r-sm); padding:13px; width:100%; background:#FCFBF9;
+}
+.submit{
+  font-family:var(--zh); font-size:17px; font-weight:700; color:#fff; background:var(--sky);
+  border:0; border-radius:99px; padding:15px; cursor:pointer; width:100%;
+  box-shadow:0 10px 22px -12px rgba(15,124,174,.95);
+}
+.submit[disabled]{opacity:.6; cursor:default}
+.submit.ghost{background:var(--paper); color:var(--ink-soft); box-shadow:none}
+.form-msg{font-size:13.5px; line-height:1.65; text-align:center; color:var(--alert); font-weight:500}
+.form-msg:empty{display:none}
+.form-done{display:flex; flex-direction:column; align-items:center; gap:11px; padding:34px 8px 12px; text-align:center}
+.done-mark{
+  width:58px; height:58px; border-radius:50%; background:var(--leaf); color:#fff;
+  font-size:29px; line-height:58px; font-weight:700;
+}
+.form-done h3{font-size:20px}
+.form-done p{font-size:14.5px; color:var(--ink-soft); line-height:1.75; max-width:26em}
+.form-done .submit{margin-top:10px}
+
+/* 觸發鈕本來是 <a>，改成 <button> 後要清掉瀏覽器預設樣式 */
+button.pill-cta,button.act,button.dock{font-family:var(--zh); border:0; text-align:left; cursor:pointer}
+button.act{width:100%}
 </style>
 </head>
 <body>
@@ -651,7 +732,7 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
       <button class="cat-card-close" type="button" aria-label="關閉">關閉</button>
     </article>
     </div>
-    <a class="pill-cta" data-form="report" href="https://REPLACE-ME.example/通報表單" target="_blank" rel="noopener">立即通報
+    <button class="pill-cta" type="button" data-open="report">立即通報
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h12M12 6l6 6-6 6" fill="none"
         stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </header>
@@ -847,7 +928,7 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
     <section class="cta" id="report">
       <h2><span class="slash">＼</span>一起打造友善社區吧<span class="slash">／</span></h2>
 
-      <a class="act act-report" data-form="report" href="https://REPLACE-ME.example/通報表單" target="_blank" rel="noopener">
+      <button class="act act-report" type="button" data-open="report">
         <span class="act-q">在台鳳里遇到<b>沒有剪耳</b>的浪貓？</span>
         <span class="act-btn">立即通報</span>
         <span class="act-art"><svg viewBox="0 0 132 84" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -859,9 +940,9 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
     <path d="M88 21 92 2l15 15zM122 22 118 3l-14 14z"/>
   </g>
 </svg></span>
-      </a>
+      </button>
 
-      <a class="act act-report act-complain" data-form="complain" href="https://REPLACE-ME.example/檢舉表單" target="_blank" rel="noopener">
+      <button class="act act-report act-complain" type="button" data-open="complain">
         <span class="act-q">在台鳳里餵完浪貓<b>沒有整理環境</b>？</span>
         <span class="act-btn">我要檢舉</span>
         <span class="act-art"><svg viewBox="0 0 132 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -873,7 +954,7 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
   </g>
   <circle cx="27" cy="25" r="3.4" fill="currentColor"/>
 </svg></span>
-      </a>
+      </button>
     </section>
   </main>
 
@@ -882,30 +963,113 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
     <p class="foot-note">地圖里界資料來源：OpenStreetMap 貢獻者</p>
   </footer>
 
-  <a class="dock" data-form="report" href="https://REPLACE-ME.example/通報表單" target="_blank" rel="noopener">立即通報
+  <button class="dock" type="button" data-open="report">立即通報
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h12M12 6l6 6-6 6" fill="none"
-      stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+  
+  <div class="form-sheet" id="form-report" hidden role="dialog" aria-modal="true"
+       aria-labelledby="form-report-h">
+    <div class="form-card">
+      <div class="form-head">
+        <div>
+          <h2 id="form-report-h">看到沒剪耳的浪貓</h2>
+          <p class="form-sub">四個問題，最快 20 秒</p>
+        </div>
+        <button type="button" class="form-x" data-close aria-label="關閉">✕</button>
+      </div>
+      <p class="privacy">🔒 這張表單不會問你的名字、電話或 email。</p>
+      <form class="form-body" data-kind="report" novalidate>
+        
+      <div class="fld">
+        <label class="lbl" for="report-place">在哪裡看到的？<i>必填</i></label>
+        <input class="txt" id="report-place" name="place" required
+               placeholder="例：互助一街 3 巷口、一心南街公園旁" autocomplete="off">
+        <button type="button" class="geo" data-geo="report">用我目前的位置</button>
+        <p class="geo-out" data-geo-out="report" hidden></p>
+        <p class="hint">按了才會抓位置，用來把貓標到地圖上。不按也可以送出。</p>
+      </div>
+      <div class="fld">
+        <span class="lbl">有沒有剪耳？<i>必填</i></span>
+        <div class="opts"><label class="opt"><input type="radio" name="eartip" value="沒有剪耳" checked><span>沒有剪耳</span></label><label class="opt"><input type="radio" name="eartip" value="有剪耳"><span>有剪耳</span></label><label class="opt"><input type="radio" name="eartip" value="沒看清楚"><span>沒看清楚</span></label></div>
+        <p class="hint">剪耳＝已經結紮過了，不用再通報。不確定就選「沒看清楚」。</p>
+      </div>
+      <div class="fld">
+        <label class="lbl" for="report-looks">貓長什麼樣子？<i>可跳過</i></label>
+        <input class="txt" id="report-looks" name="looks"
+               placeholder="例：橘白色，大概兩隻" autocomplete="off">
+      </div>
+        <div class="fld">
+          <label class="lbl" for="report-photo">照片<i>可跳過</i></label>
+          <input class="file" id="report-photo" name="photo" type="file"
+                 accept="image/*" capture="environment">
+          <p class="hint">會自動縮小再上傳，不會佔你的流量。</p>
+        </div>
+        <button class="submit" type="submit">送出通報</button>
+        <p class="form-msg" data-msg role="status"></p>
+      </form>
+      <div class="form-done" hidden>
+        <div class="done-mark">✓</div>
+        <h3>收到了，謝謝你</h3>
+        <p>我們會去看看。台鳳里的浪貓會因為這一筆少一點。</p>
+        <button type="button" class="submit ghost" data-close>關閉</button>
+      </div>
+    </div>
+  </div>
+  <div class="form-sheet" id="form-complain" hidden role="dialog" aria-modal="true"
+       aria-labelledby="form-complain-h">
+    <div class="form-card">
+      <div class="form-head">
+        <div>
+          <h2 id="form-complain-h">餵食後沒整理環境</h2>
+          <p class="form-sub">三個問題，不會問你是誰</p>
+        </div>
+        <button type="button" class="form-x" data-close aria-label="關閉">✕</button>
+      </div>
+      <p class="privacy">🔒 這張表單不會問你的名字、電話或 email。</p>
+      <form class="form-body" data-kind="complain" novalidate>
+        
+      <div class="fld">
+        <label class="lbl" for="complain-place">在哪裡看到的？<i>必填</i></label>
+        <input class="txt" id="complain-place" name="place" required
+               placeholder="例：互助一街 3 巷口、一心南街公園旁" autocomplete="off">
+        <button type="button" class="geo" data-geo="complain">用我目前的位置</button>
+        <p class="geo-out" data-geo-out="complain" hidden></p>
+        <p class="hint">按了才會抓位置，用來把貓標到地圖上。不按也可以送出。</p>
+      </div>
+      <div class="fld">
+        <span class="lbl">是什麼狀況？<i>必填</i></span>
+        <div class="opts"><label class="opt"><input type="radio" name="issue" value="剩食沒收" checked><span>剩食沒收</span></label><label class="opt"><input type="radio" name="issue" value="容器留在原地"><span>容器留在原地</span></label><label class="opt"><input type="radio" name="issue" value="環境髒亂"><span>環境髒亂</span></label><label class="opt"><input type="radio" name="issue" value="其他"><span>其他</span></label></div>
+      </div>
+      <div class="fld">
+        <label class="lbl" for="complain-note">補充說明<i>可跳過</i></label>
+        <textarea class="txt" id="complain-note" name="note" rows="3"
+                  placeholder="例：每天早上都有，位置固定"></textarea>
+      </div>
+        <div class="fld">
+          <label class="lbl" for="complain-photo">照片<i>可跳過</i></label>
+          <input class="file" id="complain-photo" name="photo" type="file"
+                 accept="image/*" capture="environment">
+          <p class="hint">會自動縮小再上傳，不會佔你的流量。</p>
+        </div>
+        <button class="submit" type="submit">送出檢舉</button>
+        <p class="form-msg" data-msg role="status"></p>
+      </form>
+      <div class="form-done" hidden>
+        <div class="done-mark">✓</div>
+        <h3>收到了，謝謝你</h3>
+        <p>我們會去看看。台鳳里的浪貓會因為這一筆少一點。</p>
+        <button type="button" class="submit ghost" data-close>關閉</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>/* ══════════════════════════════════════════════════════════════
-   設定區：整份網頁只有這裡要改。把兩個 Google 表單網址貼進來。
-   Google 表單 → 右上「傳送」→ 選鏈結圖示 🔗 → 複製網址
+   設定區：整份網頁只有這裡要改。
+   把 Apps Script 的網頁應用程式網址貼進來（部署步驟見 apps-script/README.md）。
    ══════════════════════════════════════════════════════════════ */
-var FORMS = {
-  report:   "https://REPLACE-ME.example/通報表單",   // 「立即通報」：發現沒剪耳的浪貓
-  complain: "https://REPLACE-ME.example/檢舉表單"    // 「我要檢舉」：餵食後沒整理環境
-};
-
-(function () {
-  var links = document.querySelectorAll("[data-form]");
-  for (var i = 0; i < links.length; i++) {
-    var u = FORMS[links[i].getAttribute("data-form")];
-    if (u) links[i].href = u;
-  }
-  if (/REPLACE-ME/.test(FORMS.report + FORMS.complain)) {
-    console.warn("[台鳳里] 表單網址尚未填寫，請修改 index.html 最上方的 FORMS 設定區。");
-  }
-})();
+var ENDPOINT = "https://REPLACE-ME.example/exec";
 
 (function () {
   var svg = document.getElementById('map');
@@ -1052,6 +1216,137 @@ var FORMS = {
   }
 
   apply();
+})();
+
+/* ── 站內表單 ────────────────────────────────────────────── */
+(function () {
+  var sheets = {};
+  document.querySelectorAll('.form-sheet').forEach(function (el) {
+    sheets[el.id.replace('form-', '')] = el;
+  });
+  if (!Object.keys(sheets).length) return;
+
+  var open = null;
+
+  function show(kind) {
+    var el = sheets[kind];
+    if (!el) return;
+    el.hidden = false;
+    open = el;
+    document.body.style.overflow = 'hidden';
+    var first = el.querySelector('.txt');
+    if (first) setTimeout(function () { first.focus(); }, 260);
+  }
+
+  function hide() {
+    if (!open) return;
+    open.hidden = true;
+    document.body.style.overflow = '';
+    // 還原成可再次填寫的狀態
+    open.querySelector('.form-body').hidden = false;
+    open.querySelector('.form-done').hidden = true;
+    open = null;
+  }
+
+  document.querySelectorAll('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.getAttribute('data-open')); });
+  });
+  document.querySelectorAll('[data-close]').forEach(function (b) {
+    b.addEventListener('click', hide);
+  });
+  document.querySelectorAll('.form-sheet').forEach(function (el) {
+    el.addEventListener('click', function (e) { if (e.target === el) hide(); });
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+
+  // 目前位置
+  document.querySelectorAll('[data-geo]').forEach(function (btn) {
+    var id = btn.getAttribute('data-geo');
+    var out = document.querySelector('[data-geo-out="' + id + '"]');
+    btn.addEventListener('click', function () {
+      if (!navigator.geolocation) {
+        out.hidden = false; out.textContent = '這台裝置不支援定位，直接寫地點就好。';
+        return;
+      }
+      btn.disabled = true; btn.textContent = '抓取中⋯⋯';
+      navigator.geolocation.getCurrentPosition(function (p) {
+        btn.dataset.lat = p.coords.latitude.toFixed(6);
+        btn.dataset.lng = p.coords.longitude.toFixed(6);
+        out.hidden = false;
+        out.textContent = '✓ 已記錄位置（' + btn.dataset.lat + ', ' + btn.dataset.lng + '）';
+        btn.textContent = '重新抓一次'; btn.disabled = false;
+      }, function () {
+        out.hidden = false;
+        out.style.color = 'var(--ink-faint)';
+        out.textContent = '抓不到位置，直接把地點寫在上面就可以。';
+        btn.textContent = '再試一次'; btn.disabled = false;
+      }, { enableHighAccuracy: true, timeout: 10000 });
+    });
+  });
+
+  // 上傳前先縮圖，避免佔使用者流量
+  function shrink(file, cb) {
+    if (!file) return cb('');
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () {
+      var s = Math.min(1, 1400 / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * s);
+      c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      try { cb(c.toDataURL('image/jpeg', 0.72)); } catch (err) { cb(''); }
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); cb(''); };
+    img.src = url;
+  }
+
+  document.querySelectorAll('.form-body').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var msg = form.querySelector('[data-msg]');
+      var btn = form.querySelector('.submit');
+      var place = form.querySelector('[name=place]');
+
+      if (!place.value.trim()) {
+        msg.textContent = '請先寫下你在哪裡看到的，這樣我們才找得到。';
+        place.focus();
+        return;
+      }
+      if (/REPLACE-ME/.test(ENDPOINT)) {
+        msg.textContent = '表單後端還沒接上，請先完成 apps-script/README.md 的部署步驟。';
+        return;
+      }
+
+      msg.textContent = '';
+      btn.disabled = true;
+      btn.textContent = '送出中⋯⋯';
+
+      var geo = form.querySelector('[data-geo]');
+      var data = { kind: form.getAttribute('data-kind') };
+      new FormData(form).forEach(function (v, k) { if (k !== 'photo') data[k] = v; });
+      if (geo && geo.dataset.lat) data.coords = geo.dataset.lat + ',' + geo.dataset.lng;
+
+      shrink(form.querySelector('[name=photo]').files[0], function (photo) {
+        data.photo = photo;
+        fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(data) })
+          .then(function (r) { return r.json(); })
+          .then(function (r) {
+            if (!r || !r.ok) throw new Error(r && r.error ? r.error : 'unknown');
+            form.hidden = true;
+            form.parentNode.querySelector('.form-done').hidden = false;
+            form.reset();
+          })
+          .catch(function () {
+            msg.textContent = '送不出去，可能是網路不穩。再按一次試試，或直接把照片和地點傳到里的群組。';
+          })
+          .then(function () {
+            btn.disabled = false;
+            btn.textContent = form.getAttribute('data-kind') === 'report' ? '送出通報' : '送出檢舉';
+          });
+      });
+    });
+  });
 })();
 </script>
 </body>

@@ -233,3 +233,84 @@ footer{padding:20px 18px 96px; text-align:center; color:var(--ink-faint); font-s
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
 }
+
+/* ── 站內表單 ───────────────────────────────────── */
+.form-sheet{
+  position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; justify-content:center;
+  background:rgba(16,40,54,.5); backdrop-filter:blur(3px); padding:0;
+  animation:fade .2s ease-out;
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.form-card{
+  width:100%; max-width:430px; max-height:94dvh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  background:var(--card); border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+  animation:rise .28s cubic-bezier(.2,.9,.3,1);
+}
+.form-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.form-head h2{font-size:21px}
+.form-sub{font-size:13px; color:var(--ink-faint); margin-top:3px}
+.form-x{
+  flex:0 0 34px; width:34px; height:34px; border-radius:50%; border:0; cursor:pointer;
+  background:var(--paper); color:var(--ink-soft); font-size:15px; line-height:34px; padding:0;
+}
+.privacy{
+  margin-top:14px; background:var(--sky-wash); color:var(--sky-deep);
+  border-radius:var(--r-sm); padding:9px 13px; font-size:13px; font-weight:500; line-height:1.6;
+}
+.form-body{display:flex; flex-direction:column; gap:18px; margin-top:18px}
+.fld{display:flex; flex-direction:column; gap:8px}
+.lbl{font-size:15px; font-weight:700; display:flex; align-items:baseline; gap:7px}
+.lbl i{
+  font-style:normal; font-size:11px; font-weight:500; letter-spacing:.04em;
+  color:var(--ink-faint); background:var(--paper); padding:2px 7px; border-radius:99px;
+}
+.txt{
+  font-family:var(--zh); font-size:16px; color:var(--ink); line-height:1.6;
+  border:1.5px solid var(--line); border-radius:var(--r-sm); background:#FCFBF9;
+  padding:11px 13px; width:100%; resize:vertical;
+}
+.txt::placeholder{color:#B4BCC1}
+.txt:focus{border-color:var(--sky); background:#fff; outline:none}
+.geo{
+  align-self:flex-start; font-family:var(--zh); font-size:13.5px; font-weight:700;
+  color:var(--sky-deep); background:var(--sky-wash); border:0; border-radius:99px;
+  padding:8px 15px; cursor:pointer;
+}
+.geo[disabled]{opacity:.55; cursor:default}
+.geo-out{font-size:12.5px; color:var(--leaf); font-weight:500}
+.hint{font-size:12.5px; color:var(--ink-faint); line-height:1.6}
+.opts{display:flex; flex-wrap:wrap; gap:8px}
+.opt{position:relative; cursor:pointer}
+.opt input{position:absolute; opacity:0; width:0; height:0}
+.opt span{
+  display:block; font-size:14.5px; font-weight:500; padding:9px 16px; border-radius:99px;
+  border:1.5px solid var(--line); background:#FCFBF9; color:var(--ink-soft);
+}
+.opt input:checked+span{border-color:var(--sky); background:var(--sky-wash); color:var(--sky-deep); font-weight:700}
+.opt input:focus-visible+span{outline:3px solid var(--sky-deep); outline-offset:2px}
+.file{
+  font-family:var(--zh); font-size:14px; color:var(--ink-soft);
+  border:1.5px dashed var(--line); border-radius:var(--r-sm); padding:13px; width:100%; background:#FCFBF9;
+}
+.submit{
+  font-family:var(--zh); font-size:17px; font-weight:700; color:#fff; background:var(--sky);
+  border:0; border-radius:99px; padding:15px; cursor:pointer; width:100%;
+  box-shadow:0 10px 22px -12px rgba(15,124,174,.95);
+}
+.submit[disabled]{opacity:.6; cursor:default}
+.submit.ghost{background:var(--paper); color:var(--ink-soft); box-shadow:none}
+.form-msg{font-size:13.5px; line-height:1.65; text-align:center; color:var(--alert); font-weight:500}
+.form-msg:empty{display:none}
+.form-done{display:flex; flex-direction:column; align-items:center; gap:11px; padding:34px 8px 12px; text-align:center}
+.done-mark{
+  width:58px; height:58px; border-radius:50%; background:var(--leaf); color:#fff;
+  font-size:29px; line-height:58px; font-weight:700;
+}
+.form-done h3{font-size:20px}
+.form-done p{font-size:14.5px; color:var(--ink-soft); line-height:1.75; max-width:26em}
+.form-done .submit{margin-top:10px}
+
+/* 觸發鈕本來是 <a>，改成 <button> 後要清掉瀏覽器預設樣式 */
+button.pill-cta,button.act,button.dock{font-family:var(--zh); border:0; text-align:left; cursor:pointer}
+button.act{width:100%}

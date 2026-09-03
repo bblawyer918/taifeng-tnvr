@@ -1,22 +1,8 @@
 /* ══════════════════════════════════════════════════════════════
-   設定區：整份網頁只有這裡要改。把兩個 Google 表單網址貼進來。
-   Google 表單 → 右上「傳送」→ 選鏈結圖示 🔗 → 複製網址
+   設定區：整份網頁只有這裡要改。
+   把 Apps Script 的網頁應用程式網址貼進來（部署步驟見 apps-script/README.md）。
    ══════════════════════════════════════════════════════════════ */
-var FORMS = {
-  report:   "https://REPLACE-ME.example/通報表單",   // 「立即通報」：發現沒剪耳的浪貓
-  complain: "https://REPLACE-ME.example/檢舉表單"    // 「我要檢舉」：餵食後沒整理環境
-};
-
-(function () {
-  var links = document.querySelectorAll("[data-form]");
-  for (var i = 0; i < links.length; i++) {
-    var u = FORMS[links[i].getAttribute("data-form")];
-    if (u) links[i].href = u;
-  }
-  if (/REPLACE-ME/.test(FORMS.report + FORMS.complain)) {
-    console.warn("[台鳳里] 表單網址尚未填寫，請修改 index.html 最上方的 FORMS 設定區。");
-  }
-})();
+var ENDPOINT = "https://REPLACE-ME.example/exec";
 
 (function () {
   var svg = document.getElementById('map');
@@ -163,4 +149,135 @@ var FORMS = {
   }
 
   apply();
+})();
+
+/* ── 站內表單 ────────────────────────────────────────────── */
+(function () {
+  var sheets = {};
+  document.querySelectorAll('.form-sheet').forEach(function (el) {
+    sheets[el.id.replace('form-', '')] = el;
+  });
+  if (!Object.keys(sheets).length) return;
+
+  var open = null;
+
+  function show(kind) {
+    var el = sheets[kind];
+    if (!el) return;
+    el.hidden = false;
+    open = el;
+    document.body.style.overflow = 'hidden';
+    var first = el.querySelector('.txt');
+    if (first) setTimeout(function () { first.focus(); }, 260);
+  }
+
+  function hide() {
+    if (!open) return;
+    open.hidden = true;
+    document.body.style.overflow = '';
+    // 還原成可再次填寫的狀態
+    open.querySelector('.form-body').hidden = false;
+    open.querySelector('.form-done').hidden = true;
+    open = null;
+  }
+
+  document.querySelectorAll('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.getAttribute('data-open')); });
+  });
+  document.querySelectorAll('[data-close]').forEach(function (b) {
+    b.addEventListener('click', hide);
+  });
+  document.querySelectorAll('.form-sheet').forEach(function (el) {
+    el.addEventListener('click', function (e) { if (e.target === el) hide(); });
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+
+  // 目前位置
+  document.querySelectorAll('[data-geo]').forEach(function (btn) {
+    var id = btn.getAttribute('data-geo');
+    var out = document.querySelector('[data-geo-out="' + id + '"]');
+    btn.addEventListener('click', function () {
+      if (!navigator.geolocation) {
+        out.hidden = false; out.textContent = '這台裝置不支援定位，直接寫地點就好。';
+        return;
+      }
+      btn.disabled = true; btn.textContent = '抓取中⋯⋯';
+      navigator.geolocation.getCurrentPosition(function (p) {
+        btn.dataset.lat = p.coords.latitude.toFixed(6);
+        btn.dataset.lng = p.coords.longitude.toFixed(6);
+        out.hidden = false;
+        out.textContent = '✓ 已記錄位置（' + btn.dataset.lat + ', ' + btn.dataset.lng + '）';
+        btn.textContent = '重新抓一次'; btn.disabled = false;
+      }, function () {
+        out.hidden = false;
+        out.style.color = 'var(--ink-faint)';
+        out.textContent = '抓不到位置，直接把地點寫在上面就可以。';
+        btn.textContent = '再試一次'; btn.disabled = false;
+      }, { enableHighAccuracy: true, timeout: 10000 });
+    });
+  });
+
+  // 上傳前先縮圖，避免佔使用者流量
+  function shrink(file, cb) {
+    if (!file) return cb('');
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () {
+      var s = Math.min(1, 1400 / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * s);
+      c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      try { cb(c.toDataURL('image/jpeg', 0.72)); } catch (err) { cb(''); }
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); cb(''); };
+    img.src = url;
+  }
+
+  document.querySelectorAll('.form-body').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var msg = form.querySelector('[data-msg]');
+      var btn = form.querySelector('.submit');
+      var place = form.querySelector('[name=place]');
+
+      if (!place.value.trim()) {
+        msg.textContent = '請先寫下你在哪裡看到的，這樣我們才找得到。';
+        place.focus();
+        return;
+      }
+      if (/REPLACE-ME/.test(ENDPOINT)) {
+        msg.textContent = '表單後端還沒接上，請先完成 apps-script/README.md 的部署步驟。';
+        return;
+      }
+
+      msg.textContent = '';
+      btn.disabled = true;
+      btn.textContent = '送出中⋯⋯';
+
+      var geo = form.querySelector('[data-geo]');
+      var data = { kind: form.getAttribute('data-kind') };
+      new FormData(form).forEach(function (v, k) { if (k !== 'photo') data[k] = v; });
+      if (geo && geo.dataset.lat) data.coords = geo.dataset.lat + ',' + geo.dataset.lng;
+
+      shrink(form.querySelector('[name=photo]').files[0], function (photo) {
+        data.photo = photo;
+        fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(data) })
+          .then(function (r) { return r.json(); })
+          .then(function (r) {
+            if (!r || !r.ok) throw new Error(r && r.error ? r.error : 'unknown');
+            form.hidden = true;
+            form.parentNode.querySelector('.form-done').hidden = false;
+            form.reset();
+          })
+          .catch(function () {
+            msg.textContent = '送不出去，可能是網路不穩。再按一次試試，或直接把照片和地點傳到里的群組。';
+          })
+          .then(function () {
+            btn.disabled = false;
+            btn.textContent = form.getAttribute('data-kind') === 'report' ? '送出通報' : '送出檢舉';
+          });
+      });
+    });
+  });
 })();

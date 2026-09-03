@@ -9,25 +9,24 @@
 - [x] 里界地圖（資料來自 OpenStreetMap，非 Google Maps，不需要 API 金鑰）
 - [x] TNVR 四步驟說明
 - [x] 剪耳辨識說明
-- [ ] **通報／檢舉表單還沒接**（見下方「要改什麼」）
+- [x] 通報／檢舉表單（做在站內，不收集姓名／電話／email）
+- [ ] **表單後端還沒部署**（見 `apps-script/README.md`，約 5 分鐘）
 - [ ] **地圖上的貓是示範資料**，不是真實通報紀錄
 - [ ] 貓咪照片
 - [ ] 通報進度回報
 
 ## 要改什麼
 
-### 1. 表單網址
+### 1. 表單後端網址
 
-打開 `index.html`，找到最上面的設定區，只改這兩行：
+表單資料會寫進一張 Google 試算表，中間靠一支 Apps Script。
+部署步驟在 [`apps-script/README.md`](apps-script/README.md)，做完把網址貼進 `index.html` 最上面：
 
 ```js
-var FORMS = {
-  report:   "https://REPLACE-ME.example/通報表單",   // 「立即通報」
-  complain: "https://REPLACE-ME.example/檢舉表單"    // 「我要檢舉」
-};
+var ENDPOINT = "https://script.google.com/macros/s/.../exec";
 ```
 
-四個按鈕會一起換掉。
+表單只問地點、有沒有剪耳、貓的樣子和照片，不問姓名、電話或 email。
 
 ### 2. 貓咪資料
 
@@ -45,7 +44,9 @@ python3 src/build.py
 ```
 src/build.py    ← 把 HTML 組出來，改文案跟貓咪資料在這裡
 src/style.css   ← 樣式
-src/app.mjs     ← 地圖拖曳縮放、貓咪資訊卡、表單設定區
+src/app.mjs     ← 地圖拖曳縮放、貓咪資訊卡、表單送出
+src/forms.py    ← 表單題目，要加減欄位改這裡
+apps-script/    ← 表單後端（Google Apps Script）
 src/art.py      ← 所有插圖（手繪 SVG，可自由改）
 src/mapdata.json← 里界與街道，由 tools/build_mapdata.py 產生
 index.html      ← 產生出來的成品，就是部署的東西

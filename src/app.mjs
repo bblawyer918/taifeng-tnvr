@@ -283,7 +283,8 @@ var ENDPOINT = "https://script.google.com/macros/s/AKfycbz3Qiimp2DPmdoNvqv7J9aeY
             form.reset();
           })
           .catch(function () {
-            msg.textContent = '送不出去，可能是網路不穩。再按一次試試，或直接把照片和地點傳到里的群組。';
+            msg.textContent = '網路有點慢，沒收到回覆。你這筆很可能已經送出了，先不要重複按，'
+              + '過幾分鐘還是不放心的話，再把地點傳到里的群組就好。';
           })
           .then(function () {
             btn.disabled = false;
